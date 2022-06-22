@@ -19,6 +19,8 @@ const repository = UsersRepository()
   - D: delete
 */
 
+const NameRegex = /^[A-Z][a-z]+$/
+
 // ************
 // ** create **
 // ************
@@ -27,7 +29,8 @@ const CreateUserSchema = {
   body: Joi.object({
     username: Joi.string().email().required(),
     password: Joi.string().min(5).max(40).required(),
-    name: Joi.string().regex(/^[A-Za-z]+(\s?[A-Za-z])*$/).required(),
+    firstName: Joi.string().regex(NameRegex).required(),
+    lastName: Joi.string().regex(NameRegex).required(),
   }),
 }
 
@@ -51,8 +54,9 @@ const UpdateUserSchema = {
   }),
   body: Joi.object({
     password: Joi.string().min(10).max(40),
-    name: Joi.string().regex(/^[A-Za-z]+(\s?[A-Za-z])*$/),
-  }).or('password', 'name'),
+    firstName: Joi.string().regex(NameRegex).required(),
+    lastName: Joi.string().regex(NameRegex).required(),
+  }).or('password', 'fistName', 'lastName'),
 }
 
 const updateUser = async (req, res) => {
